@@ -34,20 +34,19 @@ export async function POST(request: Request) {
                            filenameLower.includes("subway") || 
                            filenameLower.includes("hoagie");
 
-    // Local mode or missing API key falls back to high-fidelity mocks
-    if (brain === "local" || !activeKey || isSandwichFile) {
+    // Check if it's the sandwich Easter egg
+    if (isSandwichFile) {
       await new Promise((resolve) => setTimeout(resolve, 2500));
-      if (isSandwichFile) {
-        reportData = MOCK_REPORTS.sandwich;
-      } else {
-        const lowercaseBase64 = (imageBase64 || "").toLowerCase();
-        if (lowercaseBase64.includes("mug") || lowercaseBase64.includes("cup") || Math.random() > 0.5) {
-          reportData = MOCK_REPORTS.mug;
-        } else {
-          reportData = MOCK_REPORTS.pencil;
-        }
-      }
+      reportData = MOCK_REPORTS.sandwich;
     } else {
+      // If no API key is provided (neither server-side nor client-supplied), return an error
+      if (!activeKey) {
+        return NextResponse.json(
+          { error: "A Gemini API Key is required to analyze custom objects. Please configure one in the settings menu." },
+          { status: 400 }
+        );
+      }
+
       // Cloud API request to Gemini 2.5 Flash
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${activeKey}`;
 
