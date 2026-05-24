@@ -1,0 +1,34 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Report {
+  id                           String   @id @default(uuid())
+  slug                         String   @unique
+  objectName                   String
+  imageB64                     String   // Store base64 image string
+  summaryText                  String
+  detailsText                  String
+  materialsCount               Int
+  continentsCount              Int
+  dependencyTree               String   // JSON string of DependencyNode
+  timeline                     String   // JSON string of TimeMilestone[]
+  skills                       String   // JSON string of SkillItem[]
+  skillsSummary                String
+  temperatures                 String   // JSON string of TemperatureMilestone[]
+  prerequisiteTools            String   // JSON string of PrerequisiteTool[]
+  hazards                      String   // JSON string of HazardItem[]
+  processingDifficultySummary   String
+  verdictTitle                 String
+  verdictSubtitle              String
+  cheatItem                    String
+  cheatDescription             String
+  reflectionParagraphs         String   // JSON string of string[]
+  reflectionEnding             String
+  createdAt                    DateTime @default(now())
+}
