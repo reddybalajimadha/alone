@@ -145,10 +145,26 @@ export default function Landing() {
         <p className="mb-8 text-sm uppercase tracking-[0.3em] text-ink-faint animate-pulse">
           Alone
         </p>
-        <div className="relative mb-8 h-12 w-12 flex items-center justify-center">
-          <div className="absolute h-full w-full rounded-full border border-rule opacity-30"></div>
-          <div className="h-6 w-6 rounded-full border-2 border-ink border-t-transparent animate-spin"></div>
+        
+        {/* Artsy concentric tree rings & timeline connection animation */}
+        <div className="relative mb-12 h-28 w-28 flex items-center justify-center select-none">
+          <svg 
+            className="absolute w-full h-full stroke-ink fill-none stroke-[0.8] opacity-60 animate-[spin_45s_linear_infinite] overflow-visible" 
+            viewBox="0 0 100 100"
+          >
+            {/* Concentric ripples with staggered pulsing animations */}
+            <circle cx="50" cy="50" r="10" className="animate-[pulse_1.8s_infinite_ease-in-out_0.2s]" />
+            <circle cx="50" cy="50" r="22" className="animate-[pulse_1.8s_infinite_ease-in-out_0.5s]" strokeDasharray="3 3" />
+            <circle cx="50" cy="50" r="34" className="animate-[pulse_1.8s_infinite_ease-in-out_0.8s]" />
+            <circle cx="50" cy="50" r="46" className="animate-[pulse_1.8s_infinite_ease-in-out_1.1s]" strokeDasharray="6 3" />
+            {/* Fine crosshairs representing alignment */}
+            <line x1="50" y1="-5" x2="50" y2="105" className="opacity-25" strokeWidth={0.5} />
+            <line x1="-5" y1="50" x2="105" y2="50" className="opacity-25" strokeWidth={0.5} />
+          </svg>
+          {/* Central spinning axis core */}
+          <div className="h-5 w-5 rounded-full border border-ink border-t-transparent animate-[spin_1.5s_linear_infinite]" />
         </div>
+
         <p className="font-serif text-xl italic text-ink-soft min-h-[2rem] transition-all duration-300">
           {LOADING_CAPTIONS[loadingCaptionIdx]}
         </p>

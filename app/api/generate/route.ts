@@ -166,7 +166,32 @@ Make sure to strictly adhere to the voice guide: no exclamation marks, no AI sel
       reportData = JSON.parse(textContent);
     }
 
-    // Save report in the SQLite database via Prisma
+    // Check if an object with this name already exists in the database
+    const allReports = await db.report.findMany({
+      select: {
+        id: true,
+        slug: true,
+        objectName: true,
+      }
+    });
+
+    const existingReport = allReports.find(
+      (r) => r.objectName.toLowerCase().trim() === reportData.objectName.toLowerCase().trim()
+    );
+
+    if (existingReport) {
+      const updateData: any = {};
+      if (imageBase64) {
+        updateData.imageB64 = imageBase64;
+      }
+      const updatedReport = await db.report.update({
+        where: { id: existingReport.id },
+        data: updateData,
+      });
+      return NextResponse.json({ id: updatedReport.id, slug: updatedReport.slug });
+    }
+
+    // Save report in the SQLite/PostgreSQL database via Prisma
     const baseSlug = reportData.objectName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
     const uniqueSuffix = Date.now().toString().slice(-4);
     const slug = `${baseSlug}-${uniqueSuffix}`;
